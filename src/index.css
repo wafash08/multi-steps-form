@@ -6,6 +6,11 @@
   html {
     font-family: "Ubuntu", sans-serif;
   }
+
+  input[type="text"],
+  input[type="email"] {
+    font-family: "Ubuntu", sans-serif;
+  }
 }
 
 .border-debug {

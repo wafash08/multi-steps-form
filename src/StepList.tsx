@@ -1,6 +1,6 @@
 export default function StepList() {
   return (
-    <ul className="flex gap-6 lg:flex-col">
+    <ul className="flex gap-6 lg:flex-col justify-center">
       <StepItem label="your info" step="1" />
       <StepItem label="select plan" step="2" />
       <StepItem label="add-ons" step="3" />
