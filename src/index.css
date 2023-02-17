@@ -13,6 +13,47 @@
   }
 }
 
+/*
+remove the default styling of the checkbox using appearance
+and create the outer toggle area
+*/
+
+#select-plan {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 44px;
+  height: 24px;
+  transition: all 0.2s;
+}
+
+/*
+style the ::before content to look like
+the inner toggle switch - the bit that moves
+*/
+
+#select-plan::before {
+  width: 16px;
+  height: 16px;
+  border-radius: 9px;
+  background-color: white;
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  transform: translateY(-50%);
+  transition: all 0.2s;
+}
+
+/*
+change the outer background color and move the inner toggle switch
+when the checkbox is checked; use transitions for smooth animation
+*/
+
+#select-plan:checked::before {
+  left: 50%;
+  transition: all 0.2s;
+}
+
 .border-debug {
   border: 1px solid red;
 }
