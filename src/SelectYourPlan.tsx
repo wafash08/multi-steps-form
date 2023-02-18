@@ -5,6 +5,7 @@ import AdvanceIcon from "./AdvanceIcon";
 import ArcadeIcon from "./ArcadeIcon";
 import { FormDescription, FormTitle } from "./FormSection";
 import ProIcon from "./ProIcon";
+import usePlan from "./hooks/usePlan";
 
 type CustomRadioProps = {
   id: string;
@@ -18,7 +19,7 @@ type CustomRadioProps = {
 function CustomRadio(props: CustomRadioProps) {
   const { id, name, icon, title, price, hasYearlyPlan } = props;
   return (
-    <label htmlFor={id} className="relative">
+    <label htmlFor={id} className="relative transition">
       <input
         type="radio"
         name={name}
@@ -35,9 +36,14 @@ function CustomRadio(props: CustomRadioProps) {
           <p className="text-neutral-cool-gray">
             ${price}/{hasYearlyPlan ? "yr" : "mo"}
           </p>
-          {hasYearlyPlan && (
-            <p className="text-primary-marine-blue text-sm">2 months free</p>
-          )}
+          <p
+            className={clsx(
+              "text-primary-marine-blue text-sm transition opacity-0",
+              hasYearlyPlan && "opacity-100 visible"
+            )}
+          >
+            2 months free
+          </p>
         </div>
       </div>
     </label>
@@ -45,14 +51,9 @@ function CustomRadio(props: CustomRadioProps) {
 }
 
 export default function SelectYourPlan() {
-  const [choosePlan, setChoosePlan] = useState(false);
-  // TODO
-  // 1. TAMBAHKAN FITUR UNTUN MEMILIH PLAN, MONTHLY ATAU YEARLY
-  const handleChangePlan = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setChoosePlan(e.currentTarget.checked);
-  };
+  const { handleChangePlan, choosedPlan, yourPlan } = usePlan();
 
-  let monthlyChoosed = !choosePlan;
+  let monthlyChoosed = !choosedPlan;
   let yearlyChoosed = !monthlyChoosed;
 
   return (
@@ -66,29 +67,29 @@ export default function SelectYourPlan() {
       <div className="grid gap-6">
         <div className="grid gap-5 lg:grid-cols-3 md:grid-cols-2">
           <CustomRadio
-            hasYearlyPlan
+            hasYearlyPlan={choosedPlan}
             icon={<ArcadeIcon />}
             id="arcade"
             name="plan"
-            price={90}
+            price={yourPlan.price.arcade}
             title="Arcade"
             key="arcade"
           />
           <CustomRadio
-            hasYearlyPlan
+            hasYearlyPlan={choosedPlan}
             icon={<AdvanceIcon />}
             id="advanced"
             name="plan"
-            price={120}
+            price={yourPlan.price.advance}
             title="Advanced"
             key="advanced"
           />
           <CustomRadio
-            hasYearlyPlan
+            hasYearlyPlan={choosedPlan}
             icon={<ProIcon />}
             id="pro"
             name="plan"
-            price={150}
+            price={yourPlan.price.pro}
             title="Pro"
             key="pro"
           />
@@ -99,12 +100,12 @@ export default function SelectYourPlan() {
             className="flex items-center gap-5 cursor-pointer"
           >
             <input
-              checked={choosePlan}
+              checked={choosedPlan}
               type="checkbox"
               name="plan"
               id="select-plan"
               onChange={handleChangePlan}
-              className="order-2 rounded-full bg-primary-marine-blue border border-primary-marine-blue relative"
+              className="order-2 cursor-pointer rounded-full bg-primary-marine-blue border border-primary-marine-blue relative"
             />
             <span
               className={clsx(
