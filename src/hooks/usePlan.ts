@@ -15,7 +15,7 @@ const planList = {
       pro: 150,
     },
   },
-};
+} as const;
 
 type PlanListKeys = keyof typeof planList;
 
