@@ -1,40 +1,74 @@
-// import { createContext, useReducer } from "react";
-// import { StepAction, StepList, stepsReducer } from "./stepsreducer";
+import { createContext, Dispatch, useContext, useReducer } from "react";
 
-// type StepReducer = (state: StepList, action: StepAction) => StepList;
+type InitialSteplistContextType = {
+  current_step: number;
+};
 
-// type SteplistContextType = {
-//   current_step: number;
-// };
+type InitialSteplistDispatchContextType = Dispatch<StepAction>;
 
-// type SteplistDispatchContextType = {
-//   dispatch: (arg: StepAction) => void;
-// };
+const initialSteplistContext: InitialSteplistContextType = {
+  current_step: 0,
+};
 
-// const initialSteplistContext = {
-//   current_step: 0,
-// };
+const initialSteplistDispatchContext: InitialSteplistDispatchContextType =
+  () => {};
 
-// const initialSteplistDispatchContext = {
-//   dispatch: () => console.log("Hello World"),
-// };
+const SteplistContext = createContext(initialSteplistContext);
+const SteplistDispatchContext = createContext(initialSteplistDispatchContext);
 
-// export const SteplistContext = createContext<SteplistContextType>(
-//   initialSteplistContext
-// );
-// export const SteplistDispatchContext =
-//   createContext<SteplistDispatchContextType>(initialSteplistDispatchContext);
+type SteplistType = {
+  current_step: number;
+};
 
-// export function SteplistProvider({ children }: { children: React.ReactNode }) {
-//   const [state, dispatch] = useReducer<StepReducer>(
-//     stepsReducer,
-//     initialSteplistContext
-//   );
-//   return (
-//     <SteplistContext.Provider value={state}>
-//       <SteplistDispatchContext.Provider value={dispatch}>
-//         {children}
-//       </SteplistDispatchContext.Provider>
-//     </SteplistContext.Provider>
-//   );
-// }
+type Action<T> = {
+  type: T;
+};
+
+type StepAction =
+  | Action<"go_next_step">
+  | Action<"back_prev_step">
+  | Action<"confirmed">;
+
+export const TOTAL_STEPLIST = 3;
+
+function steplistReducer(steplist: SteplistType, action: StepAction) {
+  const { current_step } = steplist;
+
+  switch (action.type) {
+    case "go_next_step": {
+      return {
+        current_step:
+          current_step < TOTAL_STEPLIST ? current_step + 1 : current_step,
+      };
+    }
+
+    case "back_prev_step": {
+      return {
+        current_step: current_step > 0 ? current_step - 1 : current_step,
+      };
+    }
+
+    case "confirmed": {
+      return { current_step };
+    }
+  }
+}
+
+export function SteplistProvider({ children }: { children: React.ReactNode }) {
+  const [steplist, dispatch] = useReducer(steplistReducer, { current_step: 0 });
+  return (
+    <SteplistContext.Provider value={steplist}>
+      <SteplistDispatchContext.Provider value={dispatch}>
+        {children}
+      </SteplistDispatchContext.Provider>
+    </SteplistContext.Provider>
+  );
+}
+
+export function useSteplist() {
+  return useContext(SteplistContext);
+}
+
+export function useSteplistDispatch() {
+  return useContext(SteplistDispatchContext);
+}
