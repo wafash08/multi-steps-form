@@ -21,19 +21,19 @@ export default function App() {
 
   function handleNextStep() {
     dispatch({
-      type: "next_step",
+      type: "go_next_step",
     });
   }
 
   function handlePrevStep() {
     dispatch({
-      type: "prev_step",
+      type: "back_prev_step",
     });
   }
 
   function handleConfirm() {
     dispatch({
-      type: "confirm",
+      type: "confirmed",
     });
   }
 
