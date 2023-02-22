@@ -1,5 +1,6 @@
 import AddOns from "./AddOns";
 import SelectYourPlan from "./SelectYourPlan";
+import Summary from "./Summary";
 
 const STEPS = [
   {
@@ -56,7 +57,8 @@ export default function FormSection() {
   return (
     <section className="p-8 lg:p-0 bg-white -mt-10 lg:mt-0 shadow-md lg:shadow-none w-[90%] lg:w-full mx-auto lg:mx-0 rounded-md grid gap-8">
       {/* <SelectYourPlan /> */}
-      <AddOns />
+      {/* <AddOns /> */}
+      <Summary />
     </section>
   );
 }
