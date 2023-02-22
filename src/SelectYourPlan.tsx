@@ -1,11 +1,11 @@
 import { useState } from "react";
 import clsx from "clsx";
 
-import AdvanceIcon from "./AdvanceIcon";
-import ArcadeIcon from "./ArcadeIcon";
-import { FormDescription, FormTitle } from "./FormSection";
-import ProIcon from "./ProIcon";
+import AdvanceIcon from "./icons/AdvanceIcon";
+import ArcadeIcon from "./icons/ArcadeIcon";
+import ProIcon from "./icons/ProIcon";
 import usePlan from "./hooks/usePlan";
+import FormHeader from "./FormHeader";
 
 type CustomRadioProps = {
   id: string;
@@ -19,7 +19,7 @@ type CustomRadioProps = {
 function CustomRadio(props: CustomRadioProps) {
   const { id, name, icon, title, price, hasYearlyPlan } = props;
   return (
-    <label htmlFor={id} className="relative transition">
+    <label htmlFor={id} className="relative transition cursor-pointer">
       <input
         type="radio"
         name={name}
@@ -27,7 +27,7 @@ function CustomRadio(props: CustomRadioProps) {
         className="absolute inset-0 opacity-0 peer z-50 cursor-pointer"
       />
       <div className="absolute inset-0 peer-checked:border-primary-marine-blue border border-neutral-light-gray rounded-md transition" />
-      <div className="w-full h-full flex gap-4 items-start lg:justify-between lg:flex-col lg:gap-10 peer-checked:bg-neutral-magnolia p-4 transition">
+      <div className="w-full h-full flex gap-4 items-start lg:justify-between lg:flex-col lg:gap-10 peer-checked:bg-neutral-magnolia p-4 lg:p-6 transition">
         {icon}
         <div className="grid gap-1">
           <h3 className="text-primary-marine-blue font-medium text-lg leading-none">
@@ -58,12 +58,10 @@ export default function SelectYourPlan() {
 
   return (
     <>
-      <div className="grid gap-2">
-        <FormTitle>Select Your Plan</FormTitle>
-        <FormDescription>
-          You have the option of monthly or yearly billing.
-        </FormDescription>
-      </div>
+      <FormHeader
+        description="You have the option of monthly or yearly billing."
+        title="Select Your Plan"
+      />
       <div className="grid gap-6">
         <div className="grid gap-5 lg:grid-cols-3 md:grid-cols-2">
           <CustomRadio

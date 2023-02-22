@@ -1,10 +1,39 @@
-export default function StepList() {
+import clsx from "clsx";
+
+const STEPLIST = [
+  {
+    id: 0,
+    label: "Your Info",
+    step: "1",
+  },
+  {
+    id: 1,
+    label: "Select Plan",
+    step: "2",
+  },
+  {
+    id: 2,
+    label: "Add-Ons",
+    step: "3",
+  },
+  {
+    id: 3,
+    label: "Summary",
+    step: "4",
+  },
+];
+
+export default function StepList({ current_step }: { current_step: number }) {
   return (
     <ul className="flex gap-6 lg:flex-col justify-center">
-      <StepItem label="your info" step="1" />
-      <StepItem label="select plan" step="2" />
-      <StepItem label="add-ons" step="3" />
-      <StepItem label="summary" step="4" />
+      {STEPLIST.map(({ label, step, id }) => (
+        <StepItem
+          key={label}
+          label={label}
+          step={step}
+          selected_step={id === current_step}
+        />
+      ))}
     </ul>
   );
 }
@@ -12,13 +41,20 @@ export default function StepList() {
 type StepItemProps = {
   step: string;
   label: string;
-  status?: "completed" | "current";
+  selected_step: boolean;
 };
 
-function StepItem({ label, step }: StepItemProps) {
+function StepItem({ label, step, selected_step }: StepItemProps) {
   return (
     <li className="flex items-center gap-4">
-      <button className="rounded-full h-10 w-10 border-2 border-white text-white">
+      <button
+        className={clsx(
+          "rounded-full h-10 w-10 border-2 font-medium transition-all ease-in-out duration-300",
+          selected_step
+            ? "bg-primary-light-blue text-primary-marine-blue border-primary-light-blue"
+            : "text-white border-white"
+        )}
+      >
         {step}
       </button>
       <div className="uppercase hidden lg:block">
