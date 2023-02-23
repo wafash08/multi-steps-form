@@ -3,7 +3,7 @@ import {
   useSteplist,
   useSteplistDispatch,
   TOTAL_STEPLIST,
-} from "./context/StepsContext";
+} from "./context/SteplistContext";
 import FormSection from "./FormSection";
 import StepList from "./StepList";
 
@@ -15,8 +15,6 @@ export default function App() {
   const steplist = useSteplist();
   const dispatch = useSteplistDispatch();
   const { current_step } = steplist;
-
-  console.log(current_step);
 
   function handleNextStep() {
     dispatch({

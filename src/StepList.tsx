@@ -25,7 +25,7 @@ const STEPLIST = [
 
 export default function StepList({ current_step }: { current_step: number }) {
   return (
-    <ul className="flex gap-6 lg:flex-col justify-center">
+    <ul className="flex gap-5 lg:gap-10 lg:flex-col justify-center">
       {STEPLIST.map(({ label, step, id }) => (
         <StepItem
           key={label}

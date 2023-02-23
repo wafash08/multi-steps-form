@@ -1,11 +1,10 @@
-import { useState } from "react";
 import clsx from "clsx";
 
 import AdvanceIcon from "./icons/AdvanceIcon";
 import ArcadeIcon from "./icons/ArcadeIcon";
 import ProIcon from "./icons/ProIcon";
-import usePlan from "./hooks/usePlan";
 import FormHeader from "./FormHeader";
+import { useSteplist, useSteplistDispatch } from "./context/SteplistContext";
 
 type CustomRadioProps = {
   id: string;
@@ -18,6 +17,7 @@ type CustomRadioProps = {
 
 function CustomRadio(props: CustomRadioProps) {
   const { id, name, icon, title, price, hasYearlyPlan } = props;
+
   return (
     <label htmlFor={id} className="relative transition cursor-pointer">
       <input
@@ -51,10 +51,9 @@ function CustomRadio(props: CustomRadioProps) {
 }
 
 export default function SelectYourPlan() {
-  const { handleChangePlan, choosedPlan, yourPlan } = usePlan();
-
-  let monthlyChoosed = !choosedPlan;
-  let yearlyChoosed = !monthlyChoosed;
+  const steplist = useSteplist();
+  const dispatch = useSteplistDispatch();
+  const { has_chosen_plan } = steplist;
 
   return (
     <>
@@ -65,29 +64,29 @@ export default function SelectYourPlan() {
       <div className="grid gap-6">
         <div className="grid gap-5 lg:grid-cols-3 md:grid-cols-2">
           <CustomRadio
-            hasYearlyPlan={choosedPlan}
+            hasYearlyPlan={has_chosen_plan}
             icon={<ArcadeIcon />}
             id="arcade"
             name="plan"
-            price={yourPlan.price.arcade}
+            price={15}
             title="Arcade"
             key="arcade"
           />
           <CustomRadio
-            hasYearlyPlan={choosedPlan}
+            hasYearlyPlan={has_chosen_plan}
             icon={<AdvanceIcon />}
             id="advanced"
             name="plan"
-            price={yourPlan.price.advance}
+            price={15}
             title="Advanced"
             key="advanced"
           />
           <CustomRadio
-            hasYearlyPlan={choosedPlan}
+            hasYearlyPlan={has_chosen_plan}
             icon={<ProIcon />}
             id="pro"
             name="plan"
-            price={yourPlan.price.pro}
+            price={15}
             title="Pro"
             key="pro"
           />
@@ -98,17 +97,19 @@ export default function SelectYourPlan() {
             className="flex items-center gap-5 cursor-pointer"
           >
             <input
-              checked={choosedPlan}
+              checked={has_chosen_plan}
               type="checkbox"
               name="plan"
               id="select-plan"
-              onChange={handleChangePlan}
+              onChange={() => {
+                dispatch({ type: "chose_plan" });
+              }}
               className="order-2 cursor-pointer rounded-full bg-primary-marine-blue border border-primary-marine-blue relative"
             />
             <span
               className={clsx(
                 "order-1 font-medium text-neutral-cool-gray transition",
-                monthlyChoosed && "text-primary-marine-blue"
+                !has_chosen_plan && "text-primary-marine-blue"
               )}
             >
               Monthly
@@ -116,7 +117,7 @@ export default function SelectYourPlan() {
             <span
               className={clsx(
                 "order-3 font-medium text-neutral-cool-gray transition",
-                yearlyChoosed && "text-primary-marine-blue"
+                has_chosen_plan && "text-primary-marine-blue"
               )}
             >
               Yearly
