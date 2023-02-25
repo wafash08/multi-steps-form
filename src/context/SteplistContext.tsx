@@ -17,7 +17,7 @@ type StepAction =
   | Action<"go_to">;
 
 type InitialSteplistContextType = SteplistType;
-type InitialSteplistDispatchContextType = Dispatch<StepAction>;
+export type InitialSteplistDispatchContextType = Dispatch<StepAction>;
 
 const initialSteplistContext: InitialSteplistContextType = {
   current_step: 0,

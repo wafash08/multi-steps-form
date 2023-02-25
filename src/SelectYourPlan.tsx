@@ -4,7 +4,12 @@ import AdvanceIcon from "./icons/AdvanceIcon";
 import ArcadeIcon from "./icons/ArcadeIcon";
 import ProIcon from "./icons/ProIcon";
 import FormHeader from "./FormHeader";
-import { useSteplist, useSteplistDispatch } from "./context/SteplistContext";
+import {
+  InitialSteplistDispatchContextType,
+  useSteplist,
+  useSteplistDispatch,
+} from "./context/SteplistContext";
+import { ChangeEventHandler, useState } from "react";
 
 type CustomRadioProps = {
   id: string;
@@ -13,10 +18,11 @@ type CustomRadioProps = {
   title: string;
   price: number;
   hasYearlyPlan: boolean;
+  onChangePlan: ChangeEventHandler<HTMLInputElement>;
 };
 
 function CustomRadio(props: CustomRadioProps) {
-  const { id, name, icon, title, price, hasYearlyPlan } = props;
+  const { id, name, icon, title, price, hasYearlyPlan, onChangePlan } = props;
 
   return (
     <label htmlFor={id} className="relative transition cursor-pointer">
@@ -25,6 +31,8 @@ function CustomRadio(props: CustomRadioProps) {
         name={name}
         id={id}
         className="absolute inset-0 opacity-0 peer z-50 cursor-pointer"
+        onChange={onChangePlan}
+        value={id}
       />
       <div className="absolute inset-0 peer-checked:border-primary-marine-blue border border-neutral-light-gray rounded-md transition" />
       <div className="w-full h-full flex gap-4 items-start lg:justify-between lg:flex-col lg:gap-10 peer-checked:bg-neutral-magnolia p-4 lg:p-6 transition">
@@ -54,6 +62,11 @@ export default function SelectYourPlan() {
   const steplist = useSteplist();
   const dispatch = useSteplistDispatch();
   const { has_chosen_plan } = steplist;
+  const [plan, setPlan] = useState("");
+
+  function handleChangePlan(e: React.ChangeEvent<HTMLInputElement>) {
+    setPlan(e.currentTarget.value);
+  }
 
   return (
     <>
@@ -71,6 +84,7 @@ export default function SelectYourPlan() {
             price={15}
             title="Arcade"
             key="arcade"
+            onChangePlan={handleChangePlan}
           />
           <CustomRadio
             hasYearlyPlan={has_chosen_plan}
@@ -80,6 +94,7 @@ export default function SelectYourPlan() {
             price={15}
             title="Advanced"
             key="advanced"
+            onChangePlan={handleChangePlan}
           />
           <CustomRadio
             hasYearlyPlan={has_chosen_plan}
@@ -89,42 +104,55 @@ export default function SelectYourPlan() {
             price={15}
             title="Pro"
             key="pro"
+            onChangePlan={handleChangePlan}
           />
         </div>
         <div className="bg-neutral-magnolia p-4 rounded-md grid place-items-center">
-          <label
-            htmlFor="select-plan"
-            className="flex items-center gap-5 cursor-pointer"
-          >
-            <input
-              checked={has_chosen_plan}
-              type="checkbox"
-              name="plan"
-              id="select-plan"
-              onChange={() => {
-                dispatch({ type: "chose_plan" });
-              }}
-              className="order-2 cursor-pointer rounded-full bg-primary-marine-blue border border-primary-marine-blue relative"
-            />
-            <span
-              className={clsx(
-                "order-1 font-medium text-neutral-cool-gray transition",
-                !has_chosen_plan && "text-primary-marine-blue"
-              )}
-            >
-              Monthly
-            </span>
-            <span
-              className={clsx(
-                "order-3 font-medium text-neutral-cool-gray transition",
-                has_chosen_plan && "text-primary-marine-blue"
-              )}
-            >
-              Yearly
-            </span>
-          </label>
+          <Switch chosen_plan={has_chosen_plan} dispatch={dispatch} />
         </div>
       </div>
     </>
+  );
+}
+
+function Switch({
+  dispatch,
+  chosen_plan,
+}: {
+  dispatch: InitialSteplistDispatchContextType;
+  chosen_plan: boolean;
+}) {
+  return (
+    <label
+      htmlFor="select-plan"
+      className="flex items-center gap-5 cursor-pointer"
+    >
+      <input
+        checked={chosen_plan}
+        type="checkbox"
+        name="plan"
+        id="select-plan"
+        onChange={() => {
+          dispatch({ type: "chose_plan" });
+        }}
+        className="order-2 cursor-pointer rounded-full bg-primary-marine-blue border border-primary-marine-blue relative"
+      />
+      <span
+        className={clsx(
+          "order-1 font-medium text-neutral-cool-gray transition",
+          !chosen_plan && "text-primary-marine-blue"
+        )}
+      >
+        Monthly
+      </span>
+      <span
+        className={clsx(
+          "order-3 font-medium text-neutral-cool-gray transition",
+          chosen_plan && "text-primary-marine-blue"
+        )}
+      >
+        Yearly
+      </span>
+    </label>
   );
 }

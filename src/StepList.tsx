@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useSteplist } from "./context/SteplistContext";
 
 const STEPLIST = [
   {
@@ -23,7 +24,8 @@ const STEPLIST = [
   },
 ];
 
-export default function StepList({ current_step }: { current_step: number }) {
+export default function StepList() {
+  const steplist = useSteplist();
   return (
     <ul className="flex gap-5 lg:gap-10 lg:flex-col justify-center">
       {STEPLIST.map(({ label, step, id }) => (
@@ -31,7 +33,7 @@ export default function StepList({ current_step }: { current_step: number }) {
           key={label}
           label={label}
           step={step}
-          selected_step={id === current_step}
+          selected_step={id === steplist.current_step}
         />
       ))}
     </ul>
